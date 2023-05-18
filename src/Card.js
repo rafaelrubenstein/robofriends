@@ -1,7 +1,7 @@
 import React from "react";
 
 
-
+// card compenent 
 const Card = (props) =>{
 return (
 <div className='bg-light-green dib br3 pa2 ma2 grow bw2 shadow-5 outline w-20' >

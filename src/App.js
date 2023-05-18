@@ -8,31 +8,43 @@ import './App.css';
 
 
 class App extends React.Component {
-    constructor(){
+    // add state to the app, robots: an array of the robots for the cards and searchfield
+    constructor() {
         super()
         this.state = {
-            robots: robots,
+            robots: [],
             searchfield: ''
-            }
+        }
     }
+
+// method that gets the event from the searchbox 
     onSearchChange = (event) => {
-        this.setState({searchfield: event.target.value});
-       
-        
+        this.setState({ searchfield: event.target.value });
     }
-render(){
-    const filteredRobots = this.state.robots.filter( robots => {
-        return robots.name.toLowerCase().includes(this.state.searchfield.toLowerCase());
-    })
-    return(
-    <div className="tc">
-    <h1 className="f1">RoboFriends</h1>
-    <SearchBox searchChange = {this.onSearchChange} />
-     <CardList robots = {filteredRobots} />
-    </div>
-    
-    );
-} 
+// fetch list of robots from api once component mounts
+    componentDidMount() {
+        fetch('https://jsonplaceholder.typicode.com/users')
+            .then(response => response.json())
+            .then(users => { this.setState({ robots: users }) });
+    }
+    // allow for robots to be searched 
+    render() {
+        const filteredRobots = this.state.robots.filter(robots => {
+            return robots.name.toLowerCase().includes(this.state.searchfield.toLowerCase());
+        })
+        if (this.state.robots.length === 0) {
+            return <h1>Loading</h1>
+        } else {
+            return (
+                <div className="tc">
+                    <h1 className="f1">RoboFriends</h1>
+                    <SearchBox searchChange={this.onSearchChange} />
+                    <CardList robots={filteredRobots} />
+                </div>
+
+            );
+        }
+    }
 }
 
 export default App;
